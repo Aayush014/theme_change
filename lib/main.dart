@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_change/Screens/Provider/theme_provider.dart';
 import 'package:theme_change/Screens/Views/setting_screen.dart';
 import 'package:theme_change/Utils/global_theme.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  bool value = preferences.getBool("theme")?? false;
+  runApp( MyApp(theme: value,));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  bool theme;
+  MyApp ({super.key, required this.theme});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+      create: (context) => ThemeProvider(theme),
       builder:(context, child) =>  MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeClass.lightTheme,
@@ -23,7 +28,7 @@ class MyApp extends StatelessWidget {
         themeMode: Provider.of<ThemeProvider>(context, listen: true).click
             ? ThemeMode.dark
             : ThemeMode.light,
-        home: SettingScreen(),
+        home: const SettingScreen(),
       ),
     );
   }

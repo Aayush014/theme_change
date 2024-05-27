@@ -61,6 +61,7 @@ class SettingScreen extends StatelessWidget {
                 value: Provider.of<ThemeProvider>(context).click,
                 onChanged: (bool value) {
                   Provider.of<ThemeProvider>(context,listen: false).changeTheme(value);
+                  Provider.of<ThemeProvider>(context,listen: false).setTheme(value);
                 },
               ),
             ),
